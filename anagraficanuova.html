@@ -2,175 +2,96 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anagrafica nuova</title>
-    <style>
-        :root {
-            --color-bg-base: #0f172a;
-            --color-surface: #1e293b;
-            --color-text-primary: #f1f5f9;
-            --color-text-secondary: #cbd5e1;
-            --color-primary: #38bdf8;
-            --color-primary-hover: #0ea5e9;
-            --color-error: #ef4444;
-            --color-success: #10b981;
-            --color-border: rgba(203, 213, 225, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--color-bg-base);
-            color: var(--color-text-primary);
-            padding: 2rem;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--color-surface);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--color-primary);
-            font-size: 1.8rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--color-text-secondary);
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        input[type="text"],
-        input[type="email"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--color-border);
-            border-radius: 8px;
-            background: var(--color-bg-base);
-            color: var(--color-text-primary);
-            font-size: 1rem;
-        }
-
-        button {
-            width: 100%;
-            padding: 1rem;
-            background: var(--color-primary);
-            color: var(--color-bg-base);
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-
-        button:hover {
-            background: var(--color-primary-hover);
-        }
-
-        .hint {
-            color: var(--color-text-secondary);
-            font-size: 0.8rem;
-            margin-top: 0.3rem;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Anagrafica nuova</h1>
-        
-        <form id="anagraficaForm">
-            <div class="form-group">
-                <label for="nome">Nome *</label>
-                <input
-                    type="text"
-                    id="nome"
-                    required
-                    pattern="[A-Za-z]+"
-                    title="Solo lettere maiuscole/minuscole">
-                <div class="hint">Solo lettere maiuscole/minuscole</div>
-            </div>
 
-            <div class="form-group">
-                <label for="cognome">Cognome *</label>
-                <input
-                    type="text"
-                    id="cognome"
-                    required
-                    pattern="[A-Za-z]+"
-                    title="Solo lettere maiuscole/minuscole">
-                <div class="hint">Solo lettere maiuscole/minuscole</div>
-            </div>
+    <h1>Anagrafica nuova</h1>
 
-            <div class="form-group">
-                <label for="cap">CAP *</label>
-                <input
-                    type="text"
-                    id="cap"
-                    required
-                    maxlength="5"
-                    pattern="d{5}"
-                    title="Inserisci esattamente 5 cifre">
-                <div class="hint">Solo 5 numeri</div>
-            </div>
+    <form id="anagraficaForm" onsubmit="return controlla();">
+        <p>
+            <label for="nome">Nome *</label><br>
+            <input type="text" id="nome">
+        </p>
 
-            <div class="form-group">
-                <label for="username">Username *</label>
-                <input
-                    type="text"
-                    id="username"
-                    required
-                    minlength="3"
-                    maxlength="16"
-                    title="Da 3 a 16 caratteri (lettere/numeri)">
-                <div class="hint">3-16 caratteri: lettere e/o numeri</div>
-            </div>
+        <p>
+            <label for="cognome">Cognome *</label><br>
+            <input type="text" id="cognome">
+        </p>
 
-            <div class="form-group">
-                <label for="email">Email *</label>
-                <input
-                    type="email"
-                    id="email"
-                    required
-                    title="Inserisci un indirizzo email valido">
-                <div class="hint">Formato email valido</div>
-            </div>
+        <p>
+            <label for="cap">CAP *</label><br>
+            <input type="text" id="cap">
+        </p>
 
-            <button type="submit">Registrati</button>
-        </form>
-    </div>
+        <p>
+            <label for="username">Username *</label><br>
+            <input type="text" id="username">
+        </p>
+
+        <p>
+            <label for="email">Email *</label><br>
+            <input type="text" id="email">
+        </p>
+
+        <button type="submit">Registrati</button>
+    </form>
 
     <script>
-        const form = document.getElementById('anagraficaForm');
-
-        form.addEventListener('submit', function (e) {
-            // Se il form è valido secondo l'HTML5
-            if (form.checkValidity()) {
-                e.preventDefault(); // blocco l'invio "vero"
-                alert('✓ Registrazione completata con successo!');
-                form.reset();
+        function controlla() {
+            // Controllo nome
+            if (document.getElementById("nome").value == "") {
+                alert("Devi inserire il nome");
+                return false;
             }
-            // Se non è valido, il browser mostra automaticamente gli errori HTML5
-        });
+
+            // Controllo cognome
+            if (document.getElementById("cognome").value == "") {
+                alert("Devi inserire il cognome");
+                return false;
+            }
+
+            // Controllo CAP (solo controlli molto semplici)
+            var cap = document.getElementById("cap").value;
+            if (cap == "") {
+                alert("Devi inserire il CAP");
+                return false;
+            }
+            if (cap.length != 5) {
+                alert("Il CAP deve avere esattamente 5 caratteri");
+                return false;
+            }
+            if (isNaN(cap)) {
+                alert("Il CAP deve contenere solo numeri");
+                return false;
+            }
+
+            // Controllo username (solo minimo 3 caratteri)
+            var username = document.getElementById("username").value;
+            if (username == "") {
+                alert("Devi inserire lo username");
+                return false;
+            }
+            if (username.length < 3) {
+                alert("Lo username deve avere almeno 3 caratteri");
+                return false;
+            }
+
+            // Controllo email molto grezzo
+            var email = document.getElementById("email").value;
+            if (email == "") {
+                alert("Devi inserire l'email");
+                return false;
+            }
+            if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+                alert("L'email non sembra valida");
+                return false;
+            }
+
+            alert("Registrazione completata!");
+            return true; // permette l'invio del form
+        }
     </script>
+
 </body>
 </html>
