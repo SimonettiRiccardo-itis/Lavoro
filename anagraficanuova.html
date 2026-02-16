@@ -39,57 +39,71 @@
 
     <script>
         function controlla() {
+            var nome = document.getElementById("nome").value;
+            var cognome = document.getElementById("cognome").value;
+            var cap = document.getElementById("cap").value;
+            var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
+
+            // regex semplici, dichiarate qui dentro (non ottimale)
+            var regSoloLettere = /^[A-Za-z]+$/;
+            var regCap = /^[0-9]{5}$/;
+            var regUsername = /^[A-Za-z0-9]{3,16}$/;
+            var regEmail = /^[^@s]+@[^@s]+.[^@s]+$/;
+
             // Controllo nome
-            if (document.getElementById("nome").value == "") {
+            if (nome == "") {
                 alert("Devi inserire il nome");
+                return false;
+            }
+            if (!regSoloLettere.test(nome)) {
+                alert("Il nome deve contenere solo lettere (A-Z, a-z)");
                 return false;
             }
 
             // Controllo cognome
-            if (document.getElementById("cognome").value == "") {
+            if (cognome == "") {
                 alert("Devi inserire il cognome");
                 return false;
             }
+            if (!regSoloLettere.test(cognome)) {
+                alert("Il cognome deve contenere solo lettere (A-Z, a-z)");
+                return false;
+            }
 
-            // Controllo CAP (solo controlli molto semplici)
-            var cap = document.getElementById("cap").value;
+            // Controllo CAP
             if (cap == "") {
                 alert("Devi inserire il CAP");
                 return false;
             }
-            if (cap.length != 5) {
-                alert("Il CAP deve avere esattamente 5 caratteri");
-                return false;
-            }
-            if (isNaN(cap)) {
-                alert("Il CAP deve contenere solo numeri");
+            if (!regCap.test(cap)) {
+                alert("Il CAP deve essere di 5 cifre (es: 00100)");
                 return false;
             }
 
-            // Controllo username (solo minimo 3 caratteri)
-            var username = document.getElementById("username").value;
+            // Controllo username
             if (username == "") {
                 alert("Devi inserire lo username");
                 return false;
             }
-            if (username.length < 3) {
-                alert("Lo username deve avere almeno 3 caratteri");
+            if (!regUsername.test(username)) {
+                alert("Lo username deve essere lungo da 3 a 16 caratteri e contenere solo lettere e numeri");
                 return false;
             }
 
-            // Controllo email molto grezzo
-            var email = document.getElementById("email").value;
+            // Controllo email
             if (email == "") {
                 alert("Devi inserire l'email");
                 return false;
             }
-            if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
-                alert("L'email non sembra valida");
+            if (!regEmail.test(email)) {
+                alert("L'email non è valida (es: nome@esempio.it)");
                 return false;
             }
 
             alert("Registrazione completata!");
-            return true; // permette l'invio del form
+            // fa inviare davvero il form (si ricarica la pagina)
+            return true;
         }
     </script>
 
