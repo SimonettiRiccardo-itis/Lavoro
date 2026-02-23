@@ -69,7 +69,7 @@
                 return false;
             }
 
-            var regexEmail = /^[^s@]+@[^s@]+.[^s@]+$/;
+            var regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (email == "" || !regexEmail.test(email)) {
                 alert("Email invalida");
                 return false;
