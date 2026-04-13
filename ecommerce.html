@@ -3,7 +3,6 @@
 
   <div class="app-shell">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar" aria-label="Navigazione principale">
       <div class="brand">
         <svg viewBox="0 0 64 64" fill="none" aria-label="Logo MarketHub">
@@ -31,10 +30,8 @@
       </nav>
     </aside>
 
-    <!-- MAIN -->
     <main class="main" id="contenuto">
 
-      <!-- TOPBAR -->
       <header class="topbar">
         <div>
           <div class="muted">Applicazione statica pronta da consegnare</div>
@@ -45,7 +42,6 @@
 
       <div class="content">
 
-        <!-- HERO -->
         <section class="hero">
           <div>
             <h1>Marketplace CSV con carrello</h1>
@@ -59,7 +55,6 @@
           </div>
         </section>
 
-        <!-- STATS -->
         <section class="stats">
           <article class="card">
             <div class="muted">Prodotti caricati</div>
@@ -82,7 +77,6 @@
           </article>
         </section>
 
-        <!-- UPLOAD -->
         <section class="panel" id="upload">
           <h2>Importa il CSV</h2>
 
@@ -93,16 +87,14 @@
           </div>
         </section>
 
-        <!-- CATALOGO -->
+
         <section class="panel" id="catalogo">
           <h2>Catalogo dinamico</h2>
           <div id="productContainer" class="grid-products"></div>
         </section>
 
-        <!-- ANAGRAFICA + CARRELLO -->
         <section class="two-col">
 
-          <!-- FORM -->
           <section class="panel" id="anagrafica">
             <h2>Anagrafica utente</h2>
 
@@ -120,7 +112,6 @@
             </form>
           </section>
 
-          <!-- CARRELLO -->
           <section class="panel" id="carrello">
             <h2>Carrello</h2>
 
@@ -139,7 +130,6 @@
     </main>
   </div>
 
-  <!-- SCRIPT -->
   <script>
     const state = {
       products: [],
