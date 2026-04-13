@@ -131,36 +131,67 @@
   </div>
 
   <script>
-    const state = {
-      products: [],
-      cart: [],
-      customer: null
-    };
 
-    function addToCart(id) {
-      const product = state.products.find(p => p.id === id);
-      if (!product) return;
+  const state = {
+  products: [],
+  cart: [],
+  customer: null
+};
+state.products = [
+  { id: 1, nome: "Telefono", prezzo: 500 },
+  { id: 2, nome: "Laptop", prezzo: 1200 },
+  { id: 3, nome: "Cuffie", prezzo: 100 }
+];
+function renderProducts() {
+  const container = document.getElementById("productContainer");
 
-      state.cart.push(product);
-      renderCart();
-    }
+  container.innerHTML = state.products.map(p => `
+    <div>
+      <strong>${p.nome}</strong> - € ${p.prezzo}
+      <button onclick="addToCart(${p.id})">Aggiungi</button>
+    </div>
+  `).join("");
+}
+function addToCart(id) {
+  const product = state.products.find(p => Number(p.id) === Number(id));
 
-    function renderCart() {
-      const cartList = document.getElementById("cartList");
+  if (!product) {
+    console.error("Prodotto non trovato:", id);
+    return;
+  }
 
-      if (!state.cart.length) {
-        cartList.innerHTML = "Carrello vuoto";
-        return;
-      }
+  state.cart.push(product);
+  renderCart();
+}
+function renderCart() {
+  const cartList = document.getElementById("cartList");
+  const totalEl = document.getElementById("grandTotal");
 
-      cartList.innerHTML = state.cart.map(item => `
-        <div>
-          ${item.nome} - € ${item.prezzo}
-        </div>
-      `).join("");
-    }
+  if (!state.cart.length) {
+    cartList.innerHTML = "Carrello vuoto";
+    totalEl.innerText = "€ 0.00";
+    return;
+  }
 
-    window.addToCart = addToCart;
+  let totale = 0;
+
+  cartList.innerHTML = state.cart.map(item => {
+    totale += Number(item.prezzo);
+
+    return `
+      <div>
+        ${item.nome} - € ${item.prezzo}
+      </div>
+    `;
+  }).join("");
+
+  totalEl.innerText = "€ " + totale.toFixed(2);
+}
+
+window.addToCart = addToCart;
+
+renderProducts();
+renderCart();
   </script>
 
 </body>
