@@ -1,78 +1,176 @@
-<!DOCTYPE html>
-<html lang="it" data-theme="light">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Piattaforma Vendita Oggetti</title>
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-  <style>
-    :root,[data-theme="light"]{--text-xs:clamp(.75rem,.7rem + .25vw,.875rem);--text-sm:clamp(.875rem,.8rem + .35vw,1rem);--text-base:clamp(1rem,.95rem + .25vw,1.125rem);--text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);--text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;--color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#ffffff;--color-surface-offset:#efece6;--color-border:#d4d1ca;--color-divider:#dfddd8;--color-text:#28251d;--color-text-muted:#72706a;--color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;--color-success:#437a22;--color-error:#a12c7b;--shadow-sm:0 1px 2px rgba(0,0,0,.06);--shadow-md:0 8px 24px rgba(0,0,0,.08);--radius-sm:.5rem;--radius-md:.85rem;--radius-lg:1.1rem;--radius-full:9999px;--font-body:'Satoshi',Arial,sans-serif}
-    [data-theme="dark"]{--color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#22211f;--color-surface-offset:#2a2926;--color-border:#393836;--color-divider:#343330;--color-text:#ece8de;--color-text-muted:#b1ada4;--color-primary:#4f98a3;--color-primary-hover:#68aeb8;--color-primary-highlight:#243438;--color-success:#6daa45;--color-error:#d163a7;--shadow-sm:0 1px 2px rgba(0,0,0,.25);--shadow-md:0 8px 24px rgba(0,0,0,.32)}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased} body{font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--color-bg);color:var(--color-text)} img,svg{display:block;max-width:100%} button,input,select,textarea{font:inherit} a{color:inherit;text-decoration:none} button{cursor:pointer;border:none;background:none} :focus-visible{outline:2px solid var(--color-primary);outline-offset:3px}
-    .skip-link{position:absolute;left:-9999px;top:auto}.skip-link:focus{left:var(--space-4);top:var(--space-4);z-index:1000;background:var(--color-surface-2);padding:var(--space-3);border-radius:var(--radius-sm)} .app-shell{display:grid;grid-template-columns:290px 1fr;min-height:100dvh}.sidebar{background:var(--color-surface);border-right:1px solid var(--color-border);padding:var(--space-6);position:sticky;top:0;height:100dvh;overflow:auto}.main{min-width:0}.topbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);padding:var(--space-4) var(--space-6);background:color-mix(in oklab,var(--color-bg) 82%, transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--color-border)}
-    .brand{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-8)} .brand svg{width:40px;height:40px;color:var(--color-primary)} .brand-title{font-size:var(--text-lg);font-weight:700}.brand-sub{font-size:var(--text-xs);color:var(--color-text-muted)} .nav-list{list-style:none;display:grid;gap:var(--space-2)}
-    .nav-btn,.theme-btn,.primary-btn,.secondary-btn,.ghost-btn,.cart-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:44px;padding:.8rem 1rem;border-radius:var(--radius-md);transition:.18s ease;background:var(--color-surface-2);border:1px solid var(--color-border)} .nav-btn{width:100%;justify-content:flex-start;background:transparent}.nav-btn:hover,.ghost-btn:hover,.secondary-btn:hover,.theme-btn:hover{background:var(--color-surface-offset)} .primary-btn,.cart-btn{background:var(--color-primary);color:#fff;border-color:transparent}.primary-btn:hover,.cart-btn:hover{background:var(--color-primary-hover)} .secondary-btn{background:var(--color-primary-highlight)} .theme-btn{min-width:44px;padding:.8rem}
-    .content{padding:var(--space-6);display:grid;gap:var(--space-6)} .hero,.panel,.card,.cart-item,.summary-box{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)} .hero{padding:var(--space-8);display:grid;grid-template-columns:1.4fr .9fr;gap:var(--space-6);align-items:center} .hero h1{font-size:var(--text-xl);line-height:1.15;margin-bottom:var(--space-4)} .hero p{color:var(--color-text-muted);max-width:60ch}.hero-art{min-height:220px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--color-primary-highlight),var(--color-surface-2));display:grid;place-items:center;padding:var(--space-4)} .hero-art svg{width:min(100%,270px);height:auto;color:var(--color-primary)}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4)} .panel{padding:var(--space-6)} .panel h2{font-size:var(--text-lg);margin-bottom:var(--space-4)} .muted{color:var(--color-text-muted)} .stats .card{padding:var(--space-5)} .kpi{font-size:var(--text-xl);font-weight:700} .upload-box{display:grid;gap:var(--space-4)} .hint{font-size:var(--text-sm);color:var(--color-text-muted)}
-    .grid-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-4)} .product-card{display:grid;gap:var(--space-4);padding:var(--space-5);background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg)} .product-header{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3)} .badge{display:inline-flex;align-items:center;padding:.3rem .7rem;border-radius:var(--radius-full);font-size:var(--text-xs);background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700} .price{font-size:var(--text-lg);font-weight:700} .features{display:grid;gap:var(--space-2);font-size:var(--text-sm)} .features li{list-style:none;padding:var(--space-2) 0;border-bottom:1px dashed var(--color-divider)} .features li:last-child{border-bottom:none}.product-actions{display:flex;gap:var(--space-3);flex-wrap:wrap}
-    .two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--space-6)} form{display:grid;gap:var(--space-4)} .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4)} .field{display:grid;gap:var(--space-2)} label{font-size:var(--text-sm);font-weight:700} input,select,textarea{width:100%;min-height:44px;padding:.85rem 1rem;border-radius:var(--radius-md);border:1px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text)} .cart-list{display:grid;gap:var(--space-3)} .cart-item{padding:var(--space-4);display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:center} .summary-box{padding:var(--space-5);display:grid;gap:var(--space-3)} .summary-row{display:flex;justify-content:space-between;gap:var(--space-3)}
-    .success{padding:var(--space-4);border-radius:var(--radius-md);background:color-mix(in oklab,var(--color-success) 14%, var(--color-surface));border:1px solid color-mix(in oklab,var(--color-success) 40%, var(--color-border));display:none} .empty-state{padding:var(--space-6);border:1px dashed var(--color-border);border-radius:var(--radius-lg);text-align:center;color:var(--color-text-muted);background:var(--color-surface-2)} .footer-note{font-size:var(--text-sm);color:var(--color-text-muted)} .code-box{background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4);font-size:var(--text-sm);overflow:auto}
-    @media (max-width:1024px){.app-shell{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--color-border)}.hero,.two-col{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}} @media (max-width:640px){.content,.topbar,.sidebar{padding:var(--space-4)}.stats,.form-grid{grid-template-columns:1fr}.hero{padding:var(--space-5)}.product-actions{flex-direction:column}.product-actions button,.product-actions a{width:100%}}
-  </style>
-</head>
 <body>
   <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+
   <div class="app-shell">
+
+    <!-- SIDEBAR -->
     <aside class="sidebar" aria-label="Navigazione principale">
       <div class="brand">
-        <svg viewBox="0 0 64 64" fill="none" aria-label="Logo MarketHub"><rect x="8" y="10" width="48" height="44" rx="12" stroke="currentColor" stroke-width="4"></rect><path d="M20 24h24M20 32h24M20 40h16" stroke="currentColor" stroke-width="4" stroke-linecap="round"></path><circle cx="47" cy="42" r="6" fill="currentColor"></circle></svg>
-        <div><div class="brand-title">MarketHub</div><div class="brand-sub">Piattaforma demo CSV + carrello</div></div>
+        <svg viewBox="0 0 64 64" fill="none" aria-label="Logo MarketHub">
+          <rect x="8" y="10" width="48" height="44" rx="12" stroke="currentColor" stroke-width="4"></rect>
+          <path d="M20 24h24M20 32h24M20 40h16"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"></path>
+          <circle cx="47" cy="42" r="6" fill="currentColor"></circle>
+        </svg>
+
+        <div>
+          <div class="brand-title">MarketHub</div>
+          <div class="brand-sub">Piattaforma demo CSV + carrello</div>
+        </div>
       </div>
-      <nav><ul class="nav-list"><li><a class="nav-btn" href="#catalogo">Catalogo</a></li><li><a class="nav-btn" href="#upload">Importa CSV</a></li><li><a class="nav-btn" href="#anagrafica">Anagrafica</a></li><li><a class="nav-btn" href="#carrello">Carrello</a></li></ul></nav>
+
+      <nav>
+        <ul class="nav-list">
+          <li><a class="nav-btn" href="#catalogo">Catalogo</a></li>
+          <li><a class="nav-btn" href="#upload">Importa CSV</a></li>
+          <li><a class="nav-btn" href="#anagrafica">Anagrafica</a></li>
+          <li><a class="nav-btn" href="#carrello">Carrello</a></li>
+        </ul>
+      </nav>
     </aside>
+
+    <!-- MAIN -->
     <main class="main" id="contenuto">
-      <header class="topbar"><div><div class="muted">Applicazione statica pronta da consegnare</div><strong>Pannello vendita oggetti</strong></div><button class="theme-btn" type="button" data-theme-toggle aria-label="Cambia tema">🌙</button></header>
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div>
+          <div class="muted">Applicazione statica pronta da consegnare</div>
+          <strong>Pannello vendita oggetti</strong>
+        </div>
+        <button class="theme-btn" data-theme-toggle>🌙</button>
+      </header>
+
       <div class="content">
+
+        <!-- HERO -->
         <section class="hero">
-          <div><h1>Marketplace CSV con carrello</h1><p></p><div class="product-actions" style="margin-top:var(--space-5)"><a class="primary-btn" href="#upload">Carica CSV</a><a class="secondary-btn" href="./prodotti-esempio.csv" download>Scarica CSV esempio</a></div></div>
-          <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 320 220" fill="none"><rect x="24" y="28" width="120" height="164" rx="20" stroke="currentColor" stroke-width="6"></rect><rect x="176" y="48" width="112" height="64" rx="18" stroke="currentColor" stroke-width="6"></rect><rect x="172" y="128" width="120" height="48" rx="16" stroke="currentColor" stroke-width="6"></rect><circle cx="84" cy="160" r="16" fill="currentColor"></circle><path d="M52 60h64M52 82h52M196 72h72M192 146h78" stroke="currentColor" stroke-width="6" stroke-linecap="round"></path></svg></div>
+          <div>
+            <h1>Marketplace CSV con carrello</h1>
+
+            <div class="product-actions" style="margin-top: var(--space-5)">
+              <a class="primary-btn" href="#upload">Carica CSV</a>
+              <a class="secondary-btn" href="./prodotti-esempio.csv" download>
+                Scarica CSV esempio
+              </a>
+            </div>
+          </div>
         </section>
-        <section class="stats" aria-label="Statistiche rapide"><article class="card"><div class="muted">Prodotti caricati</div><div class="kpi" id="stat-products">0</div></article><article class="card"><div class="muted">Categorie</div><div class="kpi" id="stat-categories">0</div></article><article class="card"><div class="muted">Articoli nel carrello</div><div class="kpi" id="stat-cart">0</div></article><article class="card"><div class="muted">Totale carrello</div><div class="kpi" id="stat-total">€ 0.00</div></article></section>
-        <section class="panel" id="upload"><h2>Importa il CSV</h2><div class="upload-box"><p class="hint">Formato richiesto: una riga per prodotto. Colonne consigliate: categoria,nome,marca,modello,descrizione,prezzo,caratteristica.</p><input id="csvFileInput" type="file" accept=".csv,text/csv" aria-label="Carica file CSV prodotti" /><div class="code-box">Esempio intestazione: categoria,nome,marca,modello,descrizione,prezzo,caratteristica</div></div></section>
-        <section class="panel" id="catalogo"><h2>Catalogo dinamico</h2><p class="hint">Se non carichi un file, viene mostrato automaticamente il catalogo di esempio incluso nel progetto.</p><div id="productContainer" class="grid-products" aria-live="polite"></div></section>
+
+        <!-- STATS -->
+        <section class="stats">
+          <article class="card">
+            <div class="muted">Prodotti caricati</div>
+            <div class="kpi" id="stat-products">0</div>
+          </article>
+
+          <article class="card">
+            <div class="muted">Categorie</div>
+            <div class="kpi" id="stat-categories">0</div>
+          </article>
+
+          <article class="card">
+            <div class="muted">Articoli nel carrello</div>
+            <div class="kpi" id="stat-cart">0</div>
+          </article>
+
+          <article class="card">
+            <div class="muted">Totale carrello</div>
+            <div class="kpi" id="stat-total">€ 0.00</div>
+          </article>
+        </section>
+
+        <!-- UPLOAD -->
+        <section class="panel" id="upload">
+          <h2>Importa il CSV</h2>
+
+          <input id="csvFileInput" type="file" accept=".csv" />
+
+          <div class="code-box">
+            categoria,nome,marca,modello,descrizione,prezzo,caratteristica
+          </div>
+        </section>
+
+        <!-- CATALOGO -->
+        <section class="panel" id="catalogo">
+          <h2>Catalogo dinamico</h2>
+          <div id="productContainer" class="grid-products"></div>
+        </section>
+
+        <!-- ANAGRAFICA + CARRELLO -->
         <section class="two-col">
-          <section class="panel" id="anagrafica"><h2>Anagrafica utente</h2><form id="registrationForm"><div class="form-grid"><div class="field"><label for="nome">Nome</label><input id="nome" name="nome" required /></div><div class="field"><label for="cognome">Cognome</label><input id="cognome" name="cognome" required /></div><div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required /></div><div class="field"><label for="telefono">Telefono</label><input id="telefono" name="telefono" required /></div><div class="field"><label for="indirizzo">Indirizzo</label><input id="indirizzo" name="indirizzo" required /></div><div class="field"><label for="citta">Città</label><input id="citta" name="citta" required /></div></div><div class="field"><label for="note">Note ordine</label><textarea id="note" name="note" rows="4" placeholder="Citofono, orario consegna, preferenze..."></textarea></div><button class="primary-btn" type="submit">Salva anagrafica</button><div id="registrationMessage" class="success" role="status">Anagrafica salvata correttamente.</div></form></section>
-          <section class="panel" id="carrello"><h2>Carrello</h2><div id="cartList" class="cart-list"></div><div class="summary-box" style="margin-top:var(--space-4)"><div class="summary-row"><span>Subtotale</span><strong id="subtotal">€ 0.00</strong></div><div class="summary-row"><span>Spedizione</span><strong id="shipping">€ 9.90</strong></div><div class="summary-row"><span>Totale</span><strong id="grandTotal">€ 9.90</strong></div><button id="checkoutBtn" class="cart-btn" type="button">Perfeziona acquisto</button><div id="checkoutMessage" class="success" role="status"></div></div></section>
+
+          <!-- FORM -->
+          <section class="panel" id="anagrafica">
+            <h2>Anagrafica utente</h2>
+
+            <form id="registrationForm">
+              <input id="nome" placeholder="Nome" required />
+              <input id="cognome" placeholder="Cognome" required />
+              <input id="email" type="email" placeholder="Email" required />
+              <input id="telefono" placeholder="Telefono" required />
+              <input id="indirizzo" placeholder="Indirizzo" required />
+              <input id="citta" placeholder="Città" required />
+
+              <textarea id="note" placeholder="Note"></textarea>
+
+              <button class="primary-btn">Salva</button>
+            </form>
+          </section>
+
+          <!-- CARRELLO -->
+          <section class="panel" id="carrello">
+            <h2>Carrello</h2>
+
+            <div id="cartList"></div>
+
+            <div class="summary-box">
+              <div>Totale: <strong id="grandTotal">€ 0.00</strong></div>
+              <button id="checkoutBtn" class="cart-btn">
+                Acquista
+              </button>
+            </div>
+          </section>
+
         </section>
-        
       </div>
     </main>
   </div>
+
+  <!-- SCRIPT -->
   <script>
-    const state={products:[],cart:[],customer:null};
-    const defaultCsvPath='./prodotti-esempio.csv';
-    const productContainer=document.getElementById('productContainer');
-    const cartList=document.getElementById('cartList');
-    const registrationForm=document.getElementById('registrationForm');
-    const registrationMessage=document.getElementById('registrationMessage');
-    const checkoutMessage=document.getElementById('checkoutMessage');
-    const csvFileInput=document.getElementById('csvFileInput');
-    function splitCsvLine(line){const result=[];let current='',inQuotes=false;for(let i=0;i<line.length;i++){const char=line[i];if(char==='"'){if(inQuotes&&line[i+1]==='"'){current+='"';i++;}else{inQuotes=!inQuotes;}}else if(char===','&&!inQuotes){result.push(current);current='';}else{current+=char;}}result.push(current);return result;}
-    function parseCSV(text){const lines=text.trim().split(/\r?\n/).filter(Boolean);const headers=splitCsvLine(lines[0]).map(h=>h.trim());return lines.slice(1).map(line=>{const values=splitCsvLine(line);const item={};headers.forEach((header,index)=>item[header]=(values[index]||'').trim());item.prezzo=Number(String(item.prezzo||0).replace(',','.'))||0;item.id=crypto.randomUUID();return item;});}
-    function formatLabel(value){return value.charAt(0).toUpperCase()+value.slice(1).replace(/_/g,' ');} function escapeHtml(text){return text.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
-    function renderProducts(){if(!state.products.length){productContainer.innerHTML='<div class="empty-state">Nessun prodotto disponibile.</div>';updateStats();return;}productContainer.innerHTML=state.products.map(product=>{const caratteristica=product.caratteristica?`<li><strong>Gusto dominante:</strong> ${escapeHtml(String(product.caratteristica))}</li>`:'<li>Nessuna caratteristica disponibile</li>';return `<article class="product-card"><div class="product-header"><div><span class="badge">${escapeHtml(product.categoria||'Oggetto')}</span><h3>${escapeHtml(product.nome||'Prodotto senza nome')}</h3></div><div class="price">€ ${product.prezzo.toFixed(2)}</div></div><p class="muted">${escapeHtml(product.descrizione||'Nessuna descrizione disponibile.')}</p><ul class="features">${caratteristica}</ul><div class="product-actions"><button class="primary-btn" type="button" onclick="addToCart('${product.id}')">Aggiungi al carrello</button></div></article>`;}).join('');updateStats();}
-    function renderCart(){if(!state.cart.length){cartList.innerHTML='<div class="empty-state">Il carrello è vuoto. Aggiungi almeno un prodotto.</div>';}else{cartList.innerHTML=state.cart.map(item=>`<article class="cart-item"><div><strong>${escapeHtml(item.nome)}</strong><div class="muted">${escapeHtml(item.categoria||'Categoria generica')}</div></div><div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;justify-content:flex-end"><strong>€ ${item.prezzo.toFixed(2)}</strong><button class="ghost-btn" type="button" onclick="removeFromCart('${item.id}')">Rimuovi</button></div></article>`).join('');}updateTotals();updateStats();}
-    function addToCart(productId){const product=state.products.find(p=>p.id===productId);if(!product)return;state.cart.push(product);renderCart();}
-    function removeFromCart(productId){const index=state.cart.findIndex(p=>p.id===productId);if(index!==-1){state.cart.splice(index,1);renderCart();}}
-    function updateTotals(){const subtotal=state.cart.reduce((sum,item)=>sum+item.prezzo,0);const shipping=state.cart.length?9.90:0;const total=subtotal+shipping;document.getElementById('subtotal').textContent=`€ ${subtotal.toFixed(2)}`;document.getElementById('shipping').textContent=`€ ${shipping.toFixed(2)}`;document.getElementById('grandTotal').textContent=`€ ${total.toFixed(2)}`;document.getElementById('stat-total').textContent=`€ ${subtotal.toFixed(2)}`;}
-    function updateStats(){document.getElementById('stat-products').textContent=state.products.length;document.getElementById('stat-categories').textContent=new Set(state.products.map(p=>p.categoria)).size;document.getElementById('stat-cart').textContent=state.cart.length;}
-    async function loadDefaultProducts(){const response=await fetch(defaultCsvPath);const csvText=await response.text();state.products=parseCSV(csvText);renderProducts();renderCart();}
-    csvFileInput.addEventListener('change',event=>{const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{try{state.products=parseCSV(String(e.target.result));renderProducts();checkoutMessage.style.display='none';}catch{productContainer.innerHTML='<div class="empty-state">Errore nella lettura del CSV. Controlla il formato.</div>';}};reader.readAsText(file,'UTF-8');});
-    registrationForm.addEventListener('submit',event=>{event.preventDefault();const formData=new FormData(registrationForm);state.customer=Object.fromEntries(formData.entries());registrationMessage.style.display='block';checkoutMessage.style.display='none';});
-    document.getElementById('checkoutBtn').addEventListener('click',()=>{if(!state.customer){checkoutMessage.textContent='Prima devi compilare e salvare l\'anagrafica.';checkoutMessage.style.display='block';checkoutMessage.style.background='color-mix(in oklab, var(--color-error) 12%, var(--color-surface))';return;}if(!state.cart.length){checkoutMessage.textContent='Il carrello è vuoto.';checkoutMessage.style.display='block';checkoutMessage.style.background='color-mix(in oklab, var(--color-error) 12%, var(--color-surface))';return;}const total=state.cart.reduce((sum,item)=>sum+item.prezzo,0)+9.90;checkoutMessage.textContent=`Ordine confermato per ${state.customer.nome} ${state.customer.cognome}. Totale: € ${total.toFixed(2)}`;checkoutMessage.style.display='block';checkoutMessage.style.background='color-mix(in oklab, var(--color-success) 14%, var(--color-surface))';});
-    (function(){const toggle=document.querySelector('[data-theme-toggle]');const root=document.documentElement;let theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';root.setAttribute('data-theme',theme);toggle.textContent=theme==='dark'?'☀️':'🌙';toggle.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';root.setAttribute('data-theme',theme);toggle.textContent=theme==='dark'?'☀️':'🌙';});})();
-    window.addToCart=addToCart;window.removeFromCart=removeFromCart;loadDefaultProducts();
+    const state = {
+      products: [],
+      cart: [],
+      customer: null
+    };
+
+    function addToCart(id) {
+      const product = state.products.find(p => p.id === id);
+      if (!product) return;
+
+      state.cart.push(product);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartList = document.getElementById("cartList");
+
+      if (!state.cart.length) {
+        cartList.innerHTML = "Carrello vuoto";
+        return;
+      }
+
+      cartList.innerHTML = state.cart.map(item => `
+        <div>
+          ${item.nome} - € ${item.prezzo}
+        </div>
+      `).join("");
+    }
+
+    window.addToCart = addToCart;
   </script>
+
 </body>
-</html>
