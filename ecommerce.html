@@ -2,13 +2,13 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Piattaforma Vendita Oggetti Base</title>
+    <title>Piattaforma Vendita</title>
 </head>
 <body>
     <h1>MarketHub - Versione Base</h1>
 
     <h2>1. Importa CSV</h2>
-    <input type="file" id="csvFileInput" accept=".csv">
+    <input type="file" id="csvFileInput" accept=".csv" onchange="gestisciFile(this)">
 
     <h2>2. Catalogo Prodotti</h2>
     <div id="productContainer">Nessun prodotto caricato.</div>
@@ -18,105 +18,130 @@
     <p><strong>Totale: € <span id="totaleCarrello">0.00</span></strong></p>
 
     <h2>4. Anagrafica</h2>
-    <form id="registrationForm">
-        <input type="text" name="nome" placeholder="Nome" required>
-        <input type="text" name="cognome" placeholder="Cognome" required>
+    <form id="registrationForm" onsubmit="return salvaAnagrafica(event)">
+        <input type="text" id="inputNome" placeholder="Nome" required>
+        <input type="text" id="inputCognome" placeholder="Cognome" required>
         <button type="submit">Salva Anagrafica</button>
     </form>
     <p id="regMessage" style="display:none; color:green;">Salvato!</p>
 
     <h2>5. Checkout</h2>
-    <button id="checkoutBtn">Conferma Ordine</button>
+    <button id="checkoutBtn" onclick="confermaOrdine()">Conferma Ordine</button>
     <p id="checkoutMessage" style="font-weight:bold;"></p>
 
     <script>
-        let products = [];
-        let cart = [];
-        let customer = null;
+        var products = [];
+        var cart = [];
+        var customer = null;
 
-        const productContainer = document.getElementById('productContainer');
-        const cartList = document.getElementById('cartList');
-        const totalSpan = document.getElementById('totaleCarrello');
-        const checkoutMsg = document.getElementById('checkoutMessage');
-
-        document.getElementById('csvFileInput').addEventListener('change', e => {
-            const file = e.target.files[0];
+        function gestisciFile(input) {
+            var file = input.files[0];
             if (!file) return;
+
+            var reader = new FileReader();
             
-            const reader = new FileReader();
-            reader.onload = event => {
-                const lines = event.target.result.trim().split('\n');
-                products = lines.slice(1).map((line, index) => {
-                    const values = line.split(',');
-                    return {
-                        id: index,
-                        nome: values[1] || 'Senza nome',
-                        prezzo: parseFloat(values[5]) || 0
+            reader.onload = function(event) {
+                var testo = event.target.result;
+                var righe = testo.trim().split('\n');
+                
+                products = [];
+
+                for (var i = 1; i < righe.length; i++) {
+                    var colonne = righe[i].split(',');
+                    var prodotto = {
+                        id: i - 1,
+                        nome: colonne[1] || 'Senza nome',
+                        prezzo: parseFloat(colonne[5]) || 0
                     };
-                });
+                    products.push(prodotto);
+                }
                 renderProducts();
             };
+            
             reader.readAsText(file);
-        });
+        }
 
         function renderProducts() {
-            productContainer.innerHTML = products.map(p =>
-                `<div>
-                    ${p.nome} - € ${p.prezzo} 
-                    <button onclick="addToCart(${p.id})">Aggiungi</button>
-                </div>`
-            ).join('');
+            var div = document.getElementById('productContainer');
+            var html = "";
+
+            for (var i = 0; i < products.length; i++) {
+                var p = products[i];
+                html += "<div>" + p.nome + " - € " + p.prezzo + " ";
+                html += "<button onclick='addToCart(" + p.id + ")'>Aggiungi</button>";
+                html += "</div>";
+            }
+            div.innerHTML = html;
         }
 
         function renderCart() {
-            cartList.innerHTML = cart.map((p, index) =>
-                `<div>
-                    ${p.nome} - € ${p.prezzo} 
-                    <button onclick="removeFromCart(${index})">Rimuovi</button>
-                </div>`
-            ).join('');
-            
-            const total = cart.reduce((somma, p) => somma + p.prezzo, 0);
-            totalSpan.textContent = total.toFixed(2);
+            var div = document.getElementById('cartList');
+            var html = "";
+            var somma = 0;
+
+            for (var i = 0; i < cart.length; i++) {
+                var p = cart[i];
+                html += "<div>" + p.nome + " - € " + p.prezzo + " ";
+                html += "<button onclick='removeFromCart(" + i + ")'>Rimuovi</button>";
+                html += "</div>";
+                somma = somma + p.prezzo;
+            }
+
+            div.innerHTML = html;
+            document.getElementById('totaleCarrello').textContent = somma.toFixed(2);
         }
 
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            if(product) {
-                cart.push(product);
-                renderCart();
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].id === id) {
+                    cart.push(products[i]);
+                    break;
+                }
             }
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
             renderCart();
         }
 
-        document.getElementById('registrationForm').addEventListener('submit', e => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            customer = Object.fromEntries(formData.entries());
-            document.getElementById('regMessage').style.display = 'block';
-            checkoutMsg.textContent = ""; 
-        });
+        function removeFromCart(indice) {
+            cart.splice(indice, 1);
+            renderCart();
+        }
 
-        document.getElementById('checkoutBtn').addEventListener('click', () => {
-            if (!customer) {
-                checkoutMsg.style.color = "red";
-                checkoutMsg.textContent = "Errore: Compila e salva prima l'anagrafica.";
-                return;
-            }
-            if (cart.length === 0) {
-                checkoutMsg.style.color = "red";
-                checkoutMsg.textContent = "Errore: Il carrello è vuoto.";
-                return;
-            }
+        function salvaAnagrafica(event) {
+            event.preventDefault();
             
-            const total = cart.reduce((somma, item) => somma + item.prezzo, 0);
-            checkoutMsg.style.color = "green";
-            checkoutMsg.textContent = `Ordine confermato per ${customer.nome} ${customer.cognome}. Totale: € ${total.toFixed(2)}`;
-        });
+            customer = {
+                nome: document.getElementById('inputNome').value,
+                cognome: document.getElementById('inputCognome').value
+            };
+
+            document.getElementById('regMessage').style.display = 'block';
+            document.getElementById('checkoutMessage').textContent = "";
+            return false;
+        }
+
+        function confermaOrdine() {
+            var display = document.getElementById('checkoutMessage');
+
+            if (customer === null) {
+                display.style.color = "red";
+                display.textContent = "Errore: Compila e salva prima l'anagrafica.";
+                return;
+            }
+
+            if (cart.length === 0) {
+                display.style.color = "red";
+                display.textContent = "Errore: Il carrello è vuoto.";
+                return;
+            }
+
+            var totale = 0;
+            for (var i = 0; i < cart.length; i++) {
+                totale = totale + cart[i].prezzo;
+            }
+
+            display.style.color = "green";
+            display.textContent = "Ordine confermato per " + customer.nome + " " + customer.cognome + ". Totale: € " + totale.toFixed(2);
+        }
     </script>
 </body>
 </html>
