@@ -40,22 +40,24 @@
 
             var reader = new FileReader();
             
-            reader.onload = function(event) {
-                var testo = event.target.result;
-                var righe = testo.trim().split('\n');
-                
-                products = [];
+            reader.onreadystatechange = function() {
+                if (reader.readyState === 2) {
+                    var testo = reader.result;
+                    var righe = testo.trim().split('\n');
+                    
+                    products = [];
 
-                for (var i = 1; i < righe.length; i++) {
-                    var colonne = righe[i].split(',');
-                    var prodotto = {
-                        id: i - 1,
-                        nome: colonne[1] || 'Senza nome',
-                        prezzo: parseFloat(colonne[5]) || 0
-                    };
-                    products.push(prodotto);
+                    for (var i = 1; i < righe.length; i++) {
+                        var colonne = righe[i].split(',');
+                        var prodotto = {
+                            id: i - 1,
+                            nome: colonne[1] || 'Senza nome',
+                            prezzo: parseFloat(colonne[5]) || 0
+                        };
+                        products.push(prodotto);
+                    }
+                    renderProducts();
                 }
-                renderProducts();
             };
             
             reader.readAsText(file);
@@ -145,3 +147,4 @@
     </script>
 </body>
 </html>
+
