@@ -1,150 +1,181 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Piattaforma Vendita</title>
+<meta charset="UTF-8">
+<title>Piattaforma Vendita</title>
 </head>
 <body>
-    <h1>MarketHub - Versione Base</h1>
+<h1>MarketHub - Versione Base</h1>
 
-    <h2>1. Importa CSV</h2>
-    <input type="file" id="csvFileInput" accept=".csv" onchange="gestisciFile(this)">
+<h2>1. Importa CSV</h2>
+<input type="file" id="csvFileInput" accept=".csv" onchange="gestisciFile(this)">
 
-    <h2>2. Catalogo Prodotti</h2>
-    <div id="productContainer">Nessun prodotto caricato.</div>
+<h2>2. Catalogo Prodotti</h2>
+<div id="productContainer">Nessun prodotto caricato.</div>
 
-    <h2>3. Carrello</h2>
-    <div id="cartList">Il carrello è vuoto.</div>
-    <p><strong>Totale: € <span id="totaleCarrello">0.00</span></strong></p>
+<h2>3. Carrello</h2>
+<div id="cartList">Il carrello è vuoto.</div>
+<p><strong>Totale: € <span id="totaleCarrello">0.00</span></strong></p>
 
-    <h2>4. Anagrafica</h2>
-    <form id="registrationForm" onsubmit="return salvaAnagrafica(event)">
-        <input type="text" id="inputNome" placeholder="Nome" required>
-        <input type="text" id="inputCognome" placeholder="Cognome" required>
-        <button type="submit">Salva Anagrafica</button>
-    </form>
-    <p id="regMessage" style="display:none; color:green;">Salvato!</p>
+<h2>4. Anagrafica</h2>
+<form id="registrationForm" onsubmit="return salvaAnagrafica(event)">
+<input type="text" id="inputNome" placeholder="Nome" required>
+<input type="text" id="inputCognome" placeholder="Cognome" required>
+<button type="submit">Salva Anagrafica</button>
+</form>
+<p id="regMessage" style="display:none; color:green;">Salvato!</p>
 
-    <h2>5. Checkout</h2>
-    <button id="checkoutBtn" onclick="confermaOrdine()">Conferma Ordine</button>
-    <p id="checkoutMessage" style="font-weight:bold;"></p>
+<h2>5. Checkout</h2>
+<button id="checkoutBtn" onclick="confermaOrdine()">Conferma Ordine</button>
+<p id="checkoutMessage" style="font-weight:bold;"></p>
 
-    <script>
-        var products = [];
-        var cart = [];
-        var customer = null;
+<script>
 
-        function gestisciFile(input) {
-            var file = input.files[0];
-            if (!file) return;
+var listaProdotti = [];
+var carrello = [];
+var nomeCliente = null;
+var cognomeCliente = null;
+var anagraficaSalvata = false;
 
-            var reader = new FileReader();
-            
-            reader.onreadystatechange = function() {
-                if (reader.readyState === 2) {
-                    var testo = reader.result;
-                    var righe = testo.trim().split('\n');
-                    
-                    products = [];
+function gestisciFile(input) {
+  var file = input.files[0];
+  if (file == null) {
+    return;
+  }
 
-                    for (var i = 1; i < righe.length; i++) {
-                        var colonne = righe[i].split(',');
-                        var prodotto = {
-                            id: i - 1,
-                            nome: colonne[1] || 'Senza nome',
-                            prezzo: parseFloat(colonne[5]) || 0
-                        };
-                        products.push(prodotto);
-                    }
-                    renderProducts();
-                }
-            };
-            
-            reader.readAsText(file);
+  var reader = new FileReader();
+
+  reader.onreadystatechange = function() {
+    if (reader.readyState == 2) {
+      var testo = reader.result;
+      var righe = testo.split('\n');
+
+      listaProdotti = [];
+
+      for (var i = 0; i < righe.length; i++) {
+        if (i == 0) {
+          i = 1;
         }
-
-        function renderProducts() {
-            var div = document.getElementById('productContainer');
-            var html = "";
-
-            for (var i = 0; i < products.length; i++) {
-                var p = products[i];
-                html += "<div>" + p.nome + " - € " + p.prezzo + " ";
-                html += "<button onclick='addToCart(" + p.id + ")'>Aggiungi</button>";
-                html += "</div>";
-            }
-            div.innerHTML = html;
+        var colonne = righe[i].split(',');
+        var nome = colonne[1];
+        var prezzo = colonne[5];
+        if (nome == undefined) {
+          nome = 'Senza nome';
         }
-
-        function renderCart() {
-            var div = document.getElementById('cartList');
-            var html = "";
-            var somma = 0;
-
-            for (var i = 0; i < cart.length; i++) {
-                var p = cart[i];
-                html += "<div>" + p.nome + " - € " + p.prezzo + " ";
-                html += "<button onclick='removeFromCart(" + i + ")'>Rimuovi</button>";
-                html += "</div>";
-                somma = somma + p.prezzo;
-            }
-
-            div.innerHTML = html;
-            document.getElementById('totaleCarrello').textContent = somma.toFixed(2);
+        if (prezzo == undefined || prezzo == '') {
+          prezzo = 0;
         }
-
-        function addToCart(id) {
-            for (var i = 0; i < products.length; i++) {
-                if (products[i].id === id) {
-                    cart.push(products[i]);
-                    break;
-                }
-            }
-            renderCart();
+        var prodotto = new Object();
+        prodotto.id = i;
+        prodotto.nome = nome;
+        prodotto.prezzo = parseFloat(prezzo);
+        if (isNaN(prodotto.prezzo)) {
+          prodotto.prezzo = 0;
         }
+        listaProdotti.push(prodotto);
+      }
 
-        function removeFromCart(indice) {
-            cart.splice(indice, 1);
-            renderCart();
-        }
+      mostraProdotti();
+    }
+  }
 
-        function salvaAnagrafica(event) {
-            event.preventDefault();
-            
-            customer = {
-                nome: document.getElementById('inputNome').value,
-                cognome: document.getElementById('inputCognome').value
-            };
+  reader.readAsText(file);
+}
 
-            document.getElementById('regMessage').style.display = 'block';
-            document.getElementById('checkoutMessage').textContent = "";
-            return false;
-        }
+function mostraProdotti() {
+  var contenitore = document.getElementById('productContainer');
+  var html = '';
 
-        function confermaOrdine() {
-            var display = document.getElementById('checkoutMessage');
+  for (var i = 0; i < listaProdotti.length; i++) {
+    var p = listaProdotti[i];
+    var riga = '<div>' + p.nome + ' - € ' + p.prezzo;
+    riga = riga + ' <button onclick="addToCart(' + i + ')">Aggiungi</button>';
+    riga = riga + '</div>';
+    html = html + riga;
+  }
 
-            if (customer === null) {
-                display.style.color = "red";
-                display.textContent = "Errore: Compila e salva prima l'anagrafica.";
-                return;
-            }
+  if (html == '') {
+    html = 'Nessun prodotto caricato.';
+  }
+  contenitore.innerHTML = html;
+}
 
-            if (cart.length === 0) {
-                display.style.color = "red";
-                display.textContent = "Errore: Il carrello è vuoto.";
-                return;
-            }
+function addToCart(indice) {
+  var prodottoDaAggiungere = listaProdotti[indice];
+  var copia = new Object();
+  copia.nome = prodottoDaAggiungere.nome;
+  copia.prezzo = prodottoDaAggiungere.prezzo;
+  carrello.push(copia);
+  aggiornaCarrello();
+}
 
-            var totale = 0;
-            for (var i = 0; i < cart.length; i++) {
-                totale = totale + cart[i].prezzo;
-            }
+function aggiornaCarrello() {
+  var divCarrello = document.getElementById('cartList');
+  var html = '';
+  var totale = 0;
 
-            display.style.color = "green";
-            display.textContent = "Ordine confermato per " + customer.nome + " " + customer.cognome + ". Totale: € " + totale.toFixed(2);
-        }
-    </script>
+  for (var i = 0; i < carrello.length; i++) {
+    var articolo = carrello[i];
+    html = html + '<div>' + articolo.nome + ' - € ' + articolo.prezzo;
+    html = html + ' <button onclick="removeFromCart(' + i + ')">Rimuovi</button>';
+    html = html + '</div>';
+    totale = totale + articolo.prezzo;
+  }
+
+  if (carrello.length == 0) {
+    divCarrello.innerHTML = 'Il carrello è vuoto.';
+  } else {
+    divCarrello.innerHTML = html;
+  }
+
+  document.getElementById('totaleCarrello').textContent = totale.toFixed(2);
+}
+
+function removeFromCart(i) {
+  var nuovoCarrello = [];
+  for (var j = 0; j < carrello.length; j++) {
+    if (j != i) {
+      nuovoCarrello.push(carrello[j]);
+    }
+  }
+  carrello = nuovoCarrello;
+  aggiornaCarrello();
+}
+
+function salvaAnagrafica(event) {
+  event.preventDefault();
+  nomeCliente = document.getElementById('inputNome').value;
+  cognomeCliente = document.getElementById('inputCognome').value;
+  anagraficaSalvata = true;
+  document.getElementById('regMessage').style.display = 'block';
+  document.getElementById('checkoutMessage').textContent = '';
+  return false;
+}
+
+function confermaOrdine() {
+  var msg = document.getElementById('checkoutMessage');
+
+  if (anagraficaSalvata == false) {
+    msg.style.color = 'red';
+    msg.textContent = 'Errore: Compila e salva prima l\'anagrafica.';
+    return;
+  }
+
+  if (carrello.length == 0) {
+    msg.style.color = 'red';
+    msg.textContent = 'Errore: Il carrello è vuoto.';
+    return;
+  }
+
+  var totaleFinale = 0;
+  for (var i = 0; i < carrello.length; i++) {
+    totaleFinale = totaleFinale + carrello[i].prezzo;
+  }
+
+  msg.style.color = 'green';
+  msg.textContent = 'Ordine confirmed per ' + nomeCliente + ' ' + cognomeCliente + '. Totale: € ' + totaleFinale.toFixed(2);
+}
+
+</script>
 </body>
 </html>
-
