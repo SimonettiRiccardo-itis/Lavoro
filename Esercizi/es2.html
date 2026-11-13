@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Es.2 - onload</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <p><a href="index.html">&larr; Home</a></p>
+  <h1>Es.2 - Uso di onload</h1>
+  <p>La richiesta parte appena si apre la pagina.</p>
+  <pre id="output"></pre>
+  <script>
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        console.log(xhr.responseText);
+        document.getElementById('output').textContent = xhr.responseText;
+      } else {
+        console.error('Errore HTTP:', xhr.status);
+        document.getElementById('output').textContent = 'Errore HTTP: ' + xhr.status;
+      }
+    };
+
+    xhr.onerror = function () {
+      console.error('Errore di rete');
+      document.getElementById('output').textContent = 'Errore di rete';
+    };
+
+    xhr.open('GET', 'dati.txt', true);
+    xhr.send();
+  </script>
+</body>
+</html>

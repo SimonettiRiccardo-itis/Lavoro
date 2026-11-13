@@ -1,0 +1,6 @@
+body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 0 15px; }
+nav a { margin-right: 10px; }
+pre { background: #eee; padding: 10px; white-space: pre-wrap; }
+button, input, select { padding: 6px 10px; margin: 3px 0; }
+.card { border: 1px solid #999; padding: 10px; margin: 10px 0; }
+.errore { color: red; }

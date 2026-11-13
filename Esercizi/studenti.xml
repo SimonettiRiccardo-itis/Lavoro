@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<studenti>
+  <studente><nome>Marco</nome><voto>8</voto></studente>
+  <studente><nome>Chiara</nome><voto>7</voto></studente>
+  <studente><nome>Luca</nome><voto>6</voto></studente>
+  <studente><nome>Francesca</nome><voto>9</voto></studente>
+  <studente><nome>Giovanni</nome><voto>5</voto></studente>
+</studenti>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Es.3 - responseText vs responseXML</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <p><a href="index.html">&larr; Home</a></p>
+  <h1>Es.3 - responseText vs responseXML</h1>
+  <button id="bJson">Carica JSON</button>
+  <button id="bXml">Carica XML</button>
+  <pre id="output"></pre>
+  <script>
+    const output = document.getElementById('output');
+
+    // JSON -> responseText + JSON.parse
+    function caricaJSON() {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          const dati = JSON.parse(xhr.responseText); // <-- responseText
+          console.log(dati);
+          output.textContent = 'JSON:\n';
+          dati.forEach(function (s) {
+            output.textContent += s.nome + ': ' + s.voto + '\n';
+          });
+        }
+      };
+      xhr.open('GET', 'studenti.json', true);
+      xhr.send();
+    }
+
+    // XML -> responseXML
+    function caricaXML() {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          let doc = xhr.responseXML; // <-- responseXML (Document)
+          if (doc === null) {
+            // se il MIME type non è xml uso DOMParser
+            doc = new DOMParser().parseFromString(xhr.responseText, 'application/xml');
+          }
+          output.textContent = 'XML:\n';
+          doc.querySelectorAll('studente').forEach(function (s) {
+            const nome = s.querySelector('nome').textContent;
+            const voto = s.querySelector('voto').textContent;
+            console.log(nome, voto);
+            output.textContent += nome + ': ' + voto + '\n';
+          });
+        }
+      };
+      xhr.open('GET', 'studenti.xml', true);
+      xhr.send();
+    }
+
+    document.getElementById('bJson').addEventListener('click', caricaJSON);
+    document.getElementById('bXml').addEventListener('click', caricaXML);
+  </script>
+</body>
+</html>
